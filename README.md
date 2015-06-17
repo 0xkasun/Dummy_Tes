@@ -2,8 +2,8 @@
 
 
 # Dummy_Tes
-dummy repo for tesseract maven project
 
+##### Teseract recognition module for GSoC
 
 ###Installation Info
 
