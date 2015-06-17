@@ -12,6 +12,7 @@ import javax.naming.NamingException;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import java.sql.*;
+import net.sourceforge.tess4j.util.LoadLibs;
 
 /**
  *
@@ -97,12 +98,16 @@ public class TesMain {
                }
         
         
-        static void insertOutput(Connection conn,String output,String filelocation) throws SQLException{
+        static void insertOutput(Connection conn,int project_id,String filelocation,String output) throws SQLException{
              
-                 System.out.println("Creating statement...");
+             System.out.println("Creating statement...");
              
+                  
+//                  String sql;
+//                  sql = "INSERT INTO output_text (file_location,output_string) values('"+filelocation+"','"+output+"')";
                   Statement s=(Statement) conn.createStatement();
-                  s.executeUpdate("INSERT INTO output_text (file_location,output_string) values('"+filelocation+"','"+output+"')");
+                   s.executeUpdate("INSERT INTO output_text (project_id,file_location,output_string) values('"+project_id+"','"+filelocation+"','"+output+"')");
+                  
                   s.close();
                   conn.close();
                   System.out.println("One Record added!!");
@@ -118,14 +123,14 @@ public class TesMain {
                     File imageFile = new File("eurotext.tif");
                     Tesseract instance = Tesseract.getInstance();  // JNA Interface Mapping
                     // Tesseract1 instance = new Tesseract1(); // JNA Direct Mapping
-                    // File tessDataFolder = LoadLibs.extractTessResources("tessdata"); // Maven build bundles English data
-                    // instance.setDatapath(tessDataFolder.getAbsolutePath());
+                    File tessDataFolder = LoadLibs.extractTessResources("tessdata"); // Maven build bundles English data
+                    instance.setDatapath(tessDataFolder.getAbsolutePath());
 
                     try {
                         String result = instance.doOCR(imageFile);
                         System.out.println(result);
                         Connection con=TesMain.connctToDb();
-                        TesMain.insertOutput(con,"eurotext.tif", result);
+                        TesMain.insertOutput(con,1,"eurotext.tif", result);
                         
                     } catch (TesseractException e) {
                         System.err.println(e.getMessage());
