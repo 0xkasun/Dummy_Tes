@@ -99,14 +99,10 @@ public class TesMain {
         
         static void insertOutput(Connection conn,String output,String filelocation) throws SQLException{
              
-             System.out.println("Creating statement...");
+                 System.out.println("Creating statement...");
              
-                  
-//                  String sql;
-//                  sql = "INSERT INTO output_text (file_location,output_string) values('"+filelocation+"','"+output+"')";
                   Statement s=(Statement) conn.createStatement();
-                   s.executeUpdate("INSERT INTO output_text (file_location,output_string) values('"+filelocation+"','"+output+"')");
-                  
+                  s.executeUpdate("INSERT INTO output_text (file_location,output_string) values('"+filelocation+"','"+output+"')");
                   s.close();
                   conn.close();
                   System.out.println("One Record added!!");
