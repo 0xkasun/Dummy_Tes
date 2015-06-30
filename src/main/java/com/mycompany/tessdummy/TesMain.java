@@ -9,9 +9,9 @@ import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 import java.io.File;
 import javax.naming.NamingException;
-import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import java.sql.*;
+import net.sourceforge.tess4j.Tesseract1;
 import net.sourceforge.tess4j.util.LoadLibs;
 
 /**
@@ -106,7 +106,7 @@ public class TesMain {
 //                  String sql;
 //                  sql = "INSERT INTO output_text (file_location,output_string) values('"+filelocation+"','"+output+"')";
                   Statement s=(Statement) conn.createStatement();
-                   s.executeUpdate("INSERT INTO output_text (project_id,file_location,output_string) values('"+project_id+"','"+filelocation+"','"+output+"')");
+                  s.executeUpdate("INSERT INTO output_text (project_id,file_location,output_string) values('"+project_id+"','"+filelocation+"','"+output+"')");
                   
                   s.close();
                   conn.close();
@@ -121,8 +121,8 @@ public class TesMain {
                     System.setProperty("jna.library.path", "32".equals(System.getProperty("sun.arch.data.model")) ? "lib/win32-x86" : "lib/win32-x86-64");
                     
                     File imageFile = new File("eurotext.tif");
-                    Tesseract instance = Tesseract.getInstance();  // JNA Interface Mapping
-                    // Tesseract1 instance = new Tesseract1(); // JNA Direct Mapping
+                    //Tesseract instance = Tesseract.getInstance();  // JNA Interface Mapping
+                     Tesseract1 instance = new Tesseract1(); // JNA Direct Mapping
                     File tessDataFolder = LoadLibs.extractTessResources("tessdata"); // Maven build bundles English data
                     instance.setDatapath(tessDataFolder.getAbsolutePath());
 
