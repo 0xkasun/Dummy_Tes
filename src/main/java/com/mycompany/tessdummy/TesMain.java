@@ -142,7 +142,7 @@ public class TesMain {
                    String result,filename;
                     System.setProperty("jna.library.path", "32".equals(System.getProperty("sun.arch.data.model")) ? "lib/win32-x86" : "lib/win32-x86-64");
                     
-                    File[] imageFile = getFilelist("/home/kasun/Dummy_Tes/input_images/");
+                    File[] imageFile = getFilelist("input_images");
                     Tesseract instance = Tesseract.getInstance();  // JNA Interface Mapping
                     instance.setLanguage("eng");
                      //Tesseract1 instance = new Tesseract1(); // JNA Direct Mapping
