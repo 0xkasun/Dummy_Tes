@@ -11,10 +11,7 @@ import java.io.File;
 import javax.naming.NamingException;
 import net.sourceforge.tess4j.TesseractException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 import net.sourceforge.tess4j.Tesseract;
-import net.sourceforge.tess4j.Tesseract1;
 import net.sourceforge.tess4j.util.LoadLibs;
 
 /**
@@ -27,13 +24,13 @@ public class TesMain {
     
     // JDBC driver name and database URL
         static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
-        static final String DB_URL = "jdbc:mysql://localhost/Tesseract_Output";
+        static final String DB_URL = "jdbc:mysql://localhost/tesseract_output";
 
         //  Database credentials
         static final String USER = "teseract_user";
         static final String PASS = "password";
     
-    //method fovr jdbc connection
+    //method for jdbc connection
         static Connection connctToDb() throws NamingException{
 
                Connection conn = null;
@@ -46,54 +43,11 @@ public class TesMain {
                   System.out.println("Connecting to database...");
                   conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
 
-                  /*
-                  //STEP 4: Execute a query
-                  System.out.println("Creating statement...");
-                  stmt = (Statement) conn.createStatement();
-                  String sql;
-                  sql = "SELECT id, first, last, age FROM Employees";
-                  ResultSet rs = stmt.executeQuery(sql);
-
-                  //STEP 5: Extract data from result set
-                  while(rs.next()){
-                     //Retrieve by column name
-                     int id  = rs.getInt("id");
-                     int age = rs.getInt("age");
-                     String first = rs.getString("first");
-                     String last = rs.getString("last");
-
-                     //Display values
-                     System.out.print("ID: " + id);
-                     System.out.print(", Age: " + age);
-                     System.out.print(", First: " + first);
-                     System.out.println(", Last: " + last);
-                          
-                        
-                  }
-                  //STEP 6: Clean-up environment
-                  rs.close();
-                  stmt.close();
-                  conn.close();
-                            */
-               }catch(SQLException se){
-                  //Handle errors for JDBC
-                  se.printStackTrace();
-               }catch(Exception e){
-                  //Handle errors for Class.forName
-                  e.printStackTrace();
+                 
+               }catch(SQLException | ClassNotFoundException se){
+                   
                }finally{
-                  //finally block used to close resources
-//                  try{
-//                     if(stmt!=null)
-//                        stmt.close();
-//                  }catch(SQLException se2){
-//                  }// nothing we can do
-//                  try{
-//                     if(conn!=null)
-//                       // conn.close();
-//                  }catch(SQLException se){
-//                    // se.printStackTrace();
-//                  }//end finally try
+                  
                }//end try
                System.out.println("Goodbye!");
                return conn;
@@ -110,7 +64,7 @@ public class TesMain {
 //                  sql = "INSERT INTO output_text (file_location,output_string) values('"+filelocation+"','"+output+"')";
                   Statement s=(Statement) conn.createStatement();
                  // s.executeUpdate("INSERT INTO output_text (project_id,file_location,output_string) values('"+project_id+"','"+filelocation+"','"+output+"')");
-                  s.executeUpdate("INSERT INTO output_text (file_location,output_string) values('"+filelocation+"','"+output+"')");
+                  s.executeUpdate("INSERT INTO `output_text` (file_location,output_string) values('"+filelocation+"','"+output+"')");
                   s.close();
                   conn.close();
                   System.out.println("One Record added!!");
@@ -158,9 +112,10 @@ public class TesMain {
                         for(int i=0;i<imageFile.length;i++){
                             filename=imageFile[i].getName();//get the file name
                             result=instance.doOCR(imageFile[i]);
-                            System.out.println(result + "\n");
-                            Connection con = TesMain.connctToDb();
-                            TesMain.insertOutput(con, i, imageFile[i].getPath(), result);
+                            Connection con = connctToDb();
+                         
+                            //insertOutput(Connection conn,int project_id,String filelocation,String output)
+                            insertOutput(con, i, imageFile[i].getPath(), result);
                             
                         }
                         
